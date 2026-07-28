@@ -36,6 +36,7 @@ function init(core, config) {
                         content: `Commands available:
 help - Shows this
 implode - Implodes you
+online - Shows how many clients are online
 `
                     })
                 break
@@ -45,6 +46,13 @@ implode - Implodes you
                         author: config.name,
                         room: msg.room,
                         content: `${msg.author} has imploded!`
+                    })
+                break
+
+                case 'online': 
+                    client.onsend({
+                        author: config.name,
+                        content: core.clients.length === 1 ? 'There is 1 client online.' : `There are ${core.clients.length} clients online.`
                     })
                 break
 
