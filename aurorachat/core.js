@@ -95,16 +95,11 @@ CoreClient.prototype.send = function(msg) {
     if(!this.room) return
     if(this.user.checkFlag(users.USER_FLAGS.muted)) return
     
-    let mobj = {
+    const mobj = this.server.pluginPassthrough({
         author: this.user.login,
         room: this.room,
         content: msg
-    }
-
-    for(const p of this.server.plugins) {
-        if(!mobj) return
-        mobj = p(mobj, this)
-    }
+    }, this)
 
     if(!mobj) return
     this.server.send(mobj)
@@ -231,6 +226,18 @@ CoreServer.prototype.loadPlugins = function(pluginlist, pluginconfig) {
         const m = require(`./plugins/${p}`)
         const f = m(this, pluginconfig[p])
         this.plugins.push(f)
+    }
+}
+
+/**
+ * @param {Message} msg
+ * @param {CoreClient} client
+ * @returns {Message | undefined}
+ */
+CoreServer.prototype.pluginPassthrough = function(msg, client) {
+    for(const p of this.plugins) {
+        if(!msg) return
+        msg = p(msg, client)
     }
 }
 
