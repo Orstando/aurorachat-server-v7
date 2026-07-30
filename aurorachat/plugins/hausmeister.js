@@ -14,6 +14,22 @@ function init(core, config) {
     }
     
     /**
+     * @typedef { { author: string, content: string } } Bulletin
+     */
+
+    /**
+     * @type { Object.<string, Bulletin[] | undefined> }
+     */
+    const bulletins = {}
+
+    function postBulletin(author, room, content) {
+        if(!(room in bulletins))
+            bulletins[room] = []
+        bulletins[room].push({author, content})
+        bulletins[room] = bulletins[room].slice(-config.bulletinLimit)
+    }
+
+    /**
      * @param {import('../core').Message} msg 
      * @param {import('../core').CoreClient} client 
      * @returns {import('../core').Message}
@@ -36,6 +52,9 @@ function init(core, config) {
                         content: `Commands available:
 help - Shows this
 implode - Implodes you
+online - Shows how many clients are online
+post <content> - Post a bulletin to the room's bulletin board
+viewposts - View posts on the room's bulletin board
 `
                     })
                 break
@@ -45,6 +64,39 @@ implode - Implodes you
                         author: config.name,
                         room: msg.room,
                         content: `${msg.author} has imploded!`
+                    })
+                break
+
+                case 'online': 
+                    client.onsend({
+                        author: config.name,
+                        content: core.clients.length === 1 ? 'There is 1 client online.' : `There are ${core.clients.length} clients online.`
+                    })
+                break
+
+                case 'post':
+                    postBulletin(msg.author, msg.room, args.join(' ').replaceAll('\n', '\\n'))
+                    client.onsend({
+                        author: config.name,
+                        content: 'Done, use !haus viewposts to see the bulletin board.'
+                    })
+                break
+
+                case 'viewposts':
+                    const board = bulletins[msg.room]
+                    if(!board) {
+                        client.onsend({
+                            author: config.name,
+                            content: 'The bulletin board is empty!'
+                        })
+                        break
+                    }
+
+                    const data = board.map(b => `${b.author} : ${b.content}`).join('\n')
+
+                    client.onsend({
+                        author: config.name,
+                        content: data
                     })
                 break
 
