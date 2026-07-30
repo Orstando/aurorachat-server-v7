@@ -114,7 +114,7 @@ CoreClient.prototype.kick = function() {
  * @callback PluginMessageCallback
  * @param {Message} msg
  * @param {CoreClient} client
- * @returns {Message}
+ * @returns {Message | undefined}
  */
 
 /**
