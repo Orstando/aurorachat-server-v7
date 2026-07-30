@@ -239,6 +239,7 @@ CoreServer.prototype.pluginPassthrough = function(msg, client) {
         if(!msg) return
         msg = p(msg, client)
     }
+    return msg
 }
 
 /**
