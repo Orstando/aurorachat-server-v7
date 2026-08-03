@@ -196,6 +196,24 @@ function adminpanel(core, app) {
         res.redirect(`/adminpanel/`)
     })
 
+    app.post('/adminpanel/ipban', (req, res) => {
+        if(sessionCheck(req, res)) return
+
+        const {ip, mode} = req.body
+        res.redirect(`/adminpanel/`)
+        if(!ip || !mode) return
+        const cip = core.computeIP(ip)
+
+        switch(mode) {
+            case 'add':
+                core.banIP(cip)
+            break
+
+            case 'remove':
+                core.unbanIP(cip)
+        }
+    })
+
     app.get('/adminpanel/ip', (req, res) => {
         if(sessionCheck(req, res)) return
 
@@ -209,6 +227,16 @@ function adminpanel(core, app) {
 
         const file = fs.readFileSync(path.join(__dirname, 'adminpanel', 'ip.ejs'), 'utf-8')
         const rendered = ejs.render(file, { req, users })
+        res.send(rendered)
+    })
+
+    app.get('/adminpanel/listipbans', (req, res) => {
+        if(sessionCheck(req, res)) return
+
+        const ips = core.getIPBans()
+
+        const file = fs.readFileSync(path.join(__dirname, 'adminpanel', 'ipbans.ejs'), 'utf-8')
+        const rendered = ejs.render(file, { req, ips })
         res.send(rendered)
     })
 

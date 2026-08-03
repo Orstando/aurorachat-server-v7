@@ -252,6 +252,18 @@ CoreServer.prototype.getUserByLogin = login => users.getUserByLogin(login)
  * @returns {users[]}
  */
 CoreServer.prototype.getUsersByIP = ip => users.getUsersByIP(ip)
+/**
+ * @param {String} ip 
+ */
+CoreServer.prototype.banIP = ip => users.banIP(ip)
+/**
+ * @param {String} ip 
+ */
+CoreServer.prototype.unbanIP = ip => users.unbanIP(ip)
+/**
+ * @returns {String[]}
+ */
+CoreServer.prototype.getIPBans = () => users.getIPBans()
 
 module.exports = CoreServer
 module.exports.CoreClient = CoreClient
