@@ -30,6 +30,9 @@ const CoreClient = function(server, ip, onsend, onkick) {
     this.ip = ip
     this.onsend = onsend
     this.onkick = onkick
+
+    this.spamtimer = null
+    this.spamcount = 0
 }
 
 CoreClient.prototype.disconnect = function() {
@@ -94,7 +97,28 @@ CoreClient.prototype.send = function(msg) {
     if(!this.user) return
     if(!this.room) return
     if(this.user.checkFlag(users.USER_FLAGS.muted)) return
-    
+
+    if(!this.spamtimer)
+        this.spamtimer = setTimeout(() => {
+            this.spamcount = 0
+            this.spamtimer = null
+        }, this.server.spaminterval)
+    this.spamcount++
+
+    if(this.spamcount > this.server.spamcountkick) {
+        console.log(`Kicking ${this.user.login} (${this.ip}) for spam`)
+        this.onkick()
+        return
+    }
+
+    if(this.spamcount > this.server.spamcount) {
+        this.onsend({
+            author: '[SERVER]',
+            content: 'Hey! You\'re sending messages way too fast! Calm down a bit.'
+        })
+        return
+    }
+
     const mobj = this.server.pluginPassthrough({
         author: this.user.login,
         room: this.room,
@@ -120,8 +144,11 @@ CoreClient.prototype.kick = function() {
 /**
  * @param {Number} maxroomhistory
  * @param {String} serverrules 
+ * @param {Number} spaminterval
+ * @param {Number} spamcount
+ * @param {Number} spamcountkick
  */
-const CoreServer = function(maxroomhistory, serverrules) {
+const CoreServer = function(maxroomhistory, serverrules, spaminterval, spamcount, spamcountkick) {
     /**
      * @type {CoreClient[]}
      */
@@ -132,6 +159,9 @@ const CoreServer = function(maxroomhistory, serverrules) {
      */
     this.history = {}
     this.maxroomhistory = maxroomhistory
+    this.spaminterval = spaminterval
+    this.spamcount = spamcount
+    this.spamcountkick = spamcountkick
 
     /**
      * @type {PluginMessageCallback[]}
