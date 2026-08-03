@@ -5,7 +5,8 @@ exports.SERVER_NAME = 'Unnamed Aurorachat V7 Server'
 exports.MAX_ROOM_HISTORY = 128
 exports.USER_SAVE_INTERVAL = 720
 exports.SPAM_INTERVAL = 5000
-exports.SPAM_COUNT = 10
+exports.SPAM_COUNT = 15
+exports.SPAM_COUNT_KICK = 25
 exports.PLUGINS = ['hausmeister']
 exports.PLUGIN_CONFIG = {
     hausmeister: {
