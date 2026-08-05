@@ -4,7 +4,7 @@ function init(core, config) {
     function onmessage(msg, client) {
         if (msg.content.includes("jack")) {
            setTimeout(()=>{
-              client.onsend({
+              core.onsend({
                            author: config.name,
                            content: "im jacking you."
               })
