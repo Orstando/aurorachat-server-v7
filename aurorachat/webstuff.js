@@ -214,6 +214,20 @@ function adminpanel(core, app) {
         }
     })
 
+    app.post('/adminpanel/createuser', (req, res) => {
+        if(sessionCheck(req, res)) return
+
+        const {login, passwd} = req.body
+        
+        res.redirect(`/adminpanel/user?user=${encodeURIComponent(login)}`)
+
+        if(core.getUserByLogin(login)) return
+        const user = core.createUser(login, passwd)
+        if(!user) return
+        user.loginIP = core.computeIP('::1')
+        user.createIP = core.computeIP('::1')
+    })
+
     app.get('/adminpanel/ip', (req, res) => {
         if(sessionCheck(req, res)) return
 

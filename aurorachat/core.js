@@ -286,6 +286,12 @@ CoreServer.prototype.getUserByLogin = login => users.getUserByLogin(login)
  */
 CoreServer.prototype.getUsersByIP = ip => users.getUsersByIP(ip)
 /**
+ * @param {String} login 
+ * @param {String} passwd 
+ * @returns {users}
+ */
+CoreServer.prototype.createUser = (login, passwd) => users.createUser(login, passwd)
+/**
  * @param {String} ip 
  */
 CoreServer.prototype.banIP = ip => users.banIP(ip)
