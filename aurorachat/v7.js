@@ -24,7 +24,7 @@ function parseV7Command(client, command, args) {
                 return ['err', ...err]
             return ['ok']
         }
-        /*
+
         case 'register': {
             if(args.length < 2) return ['err', 'args_bad']
             const [login, passwd] = args
@@ -33,11 +33,7 @@ function parseV7Command(client, command, args) {
                 return ['err', ...err]
             return ['ok']
         }
-        */
-        case 'register': {
-            if(args.length < 2) return ['err', 'args_bad']
-            return ['ok']
-        }
+
         case 'rules': {
             return ['rules', client.getServerRules()]
         }

@@ -37,6 +37,7 @@ arg: Optional arguments, each argument is terminated with a | (including the las
 - args_bad - Improper arguments specified or arguments missing
 - user_exists - User already exists
 - register_failure - User registration failed (most likely a bad username)
+- register_disabled - User registration disabled on server
 - bad_login - User login failed (a bad username or password)
 - banned|ban_reason - User was banned, a reason is also specified
 
