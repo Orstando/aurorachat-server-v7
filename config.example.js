@@ -7,7 +7,7 @@ exports.USER_SAVE_INTERVAL = 720
 exports.SPAM_INTERVAL = 5000
 exports.SPAM_COUNT = 15
 exports.SPAM_COUNT_KICK = 25
-exports.PLUGINS = ['hausmeister']
+exports.PLUGINS = ['hausmeister', 'jackbot']
 exports.PLUGIN_CONFIG = {
     hausmeister: {
         name: '[HAUSMEISTER]',
@@ -19,6 +19,9 @@ exports.PLUGIN_CONFIG = {
         token: '<token for discord bridge>',
         userId: '<user id for discord bridge>',
         room: 'general' // room to mirror
+    }
+    jackbot: {
+        name: 'Jackbot'
     }
 }
 exports.SERVER_RULES = `#1 Be Respectful
