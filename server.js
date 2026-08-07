@@ -14,7 +14,11 @@ const tcpserver = require('./aurorachat/tcp')
 const wsserver = require('./aurorachat/websocket')
 const webstuff = require('./aurorachat/webstuff')
 
-const core = new Core(config.MAX_ROOM_HISTORY, config.SERVER_RULES, config.SPAM_INTERVAL, config.SPAM_COUNT, config.SPAM_COUNT_KICK)
+const core = new Core(
+    config.MAX_ROOM_HISTORY, config.SERVER_RULES, 
+    config.SPAM_INTERVAL, config.SPAM_COUNT, config.SPAM_COUNT_KICK,
+    config.REGISTER_DISABLED
+)
 tcpserver(core, config.TCP_PORT, config.SERVER_NAME)
 wsserver(core, config.WS_PORT, config.SERVER_NAME)
 webstuff(core, config.WEB_PORT)

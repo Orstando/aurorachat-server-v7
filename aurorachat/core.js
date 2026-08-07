@@ -62,7 +62,8 @@ CoreClient.prototype.login = function(login, passwd) {
  * @param {String} passwd 
  * @returns {undefined | String[]}
  */
-CoreClient.prototype.register = function(login, passwd) {
+CoreClient.prototype.register = function(login, passwd, force = false) {
+    if((!force) && this.server.registerdisabled) return ['register_disabled']
     if(users.getUserByLogin(login)) return ['user_exists']
     const user = users.createUser(login, passwd)
     if(!user) return ['register_failure']
@@ -147,8 +148,9 @@ CoreClient.prototype.kick = function() {
  * @param {Number} spaminterval
  * @param {Number} spamcount
  * @param {Number} spamcountkick
+ * @param {Number} registerdisabled
  */
-const CoreServer = function(maxroomhistory, serverrules, spaminterval, spamcount, spamcountkick) {
+const CoreServer = function(maxroomhistory, serverrules, spaminterval, spamcount, spamcountkick, registerdisabled) {
     /**
      * @type {CoreClient[]}
      */
@@ -162,6 +164,7 @@ const CoreServer = function(maxroomhistory, serverrules, spaminterval, spamcount
     this.spaminterval = spaminterval
     this.spamcount = spamcount
     this.spamcountkick = spamcountkick
+    this.registerdisabled = registerdisabled
 
     /**
      * @type {PluginMessageCallback[]}
@@ -282,6 +285,12 @@ CoreServer.prototype.getUserByLogin = login => users.getUserByLogin(login)
  * @returns {users[]}
  */
 CoreServer.prototype.getUsersByIP = ip => users.getUsersByIP(ip)
+/**
+ * @param {String} login 
+ * @param {String} passwd 
+ * @returns {users}
+ */
+CoreServer.prototype.createUser = (login, passwd) => users.createUser(login, passwd)
 /**
  * @param {String} ip 
  */
